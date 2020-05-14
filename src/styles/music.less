@@ -1,0 +1,75 @@
+@charset 'utf-8';
+html, body {
+  font-family: PingFang SC,STHeitiSC-Light,Helvetica-Light,arial,sans-serif;
+  // 防止移动端长按页面元素被选中
+  user-select:none;
+}
+.iconfont {
+  color: #ffcd32;
+}
+.icon-back {
+  position: absolute;
+  top: 0;
+  left: 6px;
+  padding: 9px 10px 10px;
+  z-index: 10;
+  color: #ffcd32;
+  font-size: 22px;
+  &.bottom {
+    transform: rotate(-90deg)
+  }
+}
+.dots {
+  position: absolute;
+  right: 0;
+  left: 0;
+  bottom: 12px;
+  width: 100%;
+  transform: translateZ(1px);
+  text-align: center;
+  font-size: 0;
+  span {
+    display: inline-block;
+    margin: 0 4px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: hsla(0,0%,100%,.8);
+    transition: all 0.3s;
+    &.active {
+      width: 20px;
+      border-radius: 10px;
+    }
+  }
+}
+.icon-like {
+  color: red;
+}
+[v-cloak] {
+  display: none;
+}
+/**== 右侧滑进动画 ==**/
+.slide-enter-active, .slide-leave-active {
+  transition: all .3s ease;
+}
+
+.slide-enter, .slide-leave-to {
+  transform: translate3d(100%, 0, 0)!important;
+}
+
+/**== 从上往下滑进来的动画 ==**/
+.slideInDown-active, .slideInDown-leave-active {
+  transition: all .3s ease;
+}
+.slideInDown-enter, .slideInDown-leave-to {
+  transform: translate3d(0, -100%, 0)
+}
+/**== 右侧旋转进动画 ==**/
+.rotate-enter-active, .rotate-leave-active {
+  transform: translate3d(0, 0, 0);
+}
+.rotate-enter, .rotate-leave-to {
+  opacity: 0;
+  transform: rotate(-90deg);
+}
+
