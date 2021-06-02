@@ -70,6 +70,11 @@ export default {
       }
     })
   },
+  activated () {
+    if (this.BScroll) {
+      this.BScroll.refresh()
+    }
+  },
   mounted () {
     this.$nextTick(() => {
       this.BScroll = new BScroll(this.$refs.rank, {click: true})

@@ -83,6 +83,14 @@ export default {
       isShowNoResult: false
     }
   },
+  activated () {
+    if (this.shScroll) {
+      this.shScroll.refresh()
+    }
+    if (this.searchScroll) {
+       this.searchScroll.refresh()
+    }
+  },
   created () {
     getHotSearch().then(response => {
       if (response.code === 200) {

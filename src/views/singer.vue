@@ -53,6 +53,11 @@ export default {
       diff: 0
     }
   },
+  activated () {
+    if (this.scroll) {
+      this.scroll.refresh()
+    }
+  },
   created () {
     console.log('歌手页获取数据啦')
     // 存储手指信息的对象

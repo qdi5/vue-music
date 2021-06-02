@@ -1,17 +1,20 @@
 <template>
   <div class="recommend" ref="recommend">
     <div class="wrapper">
-      <div class="carousel-wrap" ref="slide">
-        <div class="carousel-content flex-horizontal-nowrap" ref="slideContent">
-          <template v-if="banners && banners.length">
-            <a href="#" v-for="(banner, index) in banners" :key="index"><img :src="banner.imageUrl" alt=""></a>
-          </template>
-        </div>
-        <div class="dots">
-          <span :class="{active: currentPageIndex === index}" v-for="(dot, index) in dots" :key="index" ></span>
-        </div>
-        <loading v-if="!banners" text="加载图片…"></loading>
+      <div class="slide-wrapper">
+        <div class="carousel-wrap" ref="slide">
+            <div class="carousel-content flex-horizontal-nowrap" ref="slideContent">
+              <template v-if="banners && banners.length">
+                <a href="#" v-for="(banner, index) in banners" :key="index"><img @load="handleImgLoad" :src="banner.imageUrl" alt=""></a>
+              </template>
+            </div>
+            <div class="dots" v-if="isFirstImgLoaded">
+              <span :class="{active: currentPageIndex === index}" v-for="(dot, index) in dots" :key="index" ></span>
+            </div>
+            <loading v-if="!banners" text="加载图片…"></loading>
+          </div>
       </div>
+       
       <p class="rm-title">热门歌单推荐</p>
       <div class="hot-song-list" v-if="songList && songList.length">
         <div class="hot-song-item flex-horizontal-nowrap flex-vertical-center" v-for="songItem in songList" :key="songItem.id" @click="$router.push({path: '/recommend/' + songItem.id, query: {title: songItem.name}})">
@@ -51,7 +54,9 @@ export default {
       // 滚动距离超过宽度/高度的 30% 时切换图片
       threshold: 0.3,
       // 是否显示指示器
-      showDot: true
+      showDot: true,
+      // 第一张图是否加载完毕
+      isFirstImgLoaded: false
     }
   },
   created () {
@@ -69,9 +74,29 @@ export default {
       }
     })
   },
+  activated () {
+    // 防止轮播图出现bug，不滚动的问题
+    if (this.slide) {
+      this.slide.enable()
+      let pageIndex = this.slide.getCurrentPage().pageX
+      this.slide.goToPage(pageIndex, 0, 0)
+      this.currentPageIndex = pageIndex
+      if (this.autoPlay) {
+        this.play()
+      }
+    }
+    if (this.recommendSlide) {
+      this.recommendSlide.refresh()
+    }
+    
+  },
+  deactivated() {
+     this.slide.disable()
+     clearTimeout(this.timer)
+  },
   mounted () {
     this.$nextTick().then(() => {
-      this.slide = new BScroll(this.$refs.recommend, {click: true})
+      this.recommendSlide = new BScroll(this.$refs.recommend, {click: true})
     })
     // 监听页面窗口变化事件
     window.addEventListener('resize', () => {
@@ -186,6 +211,12 @@ export default {
     refresh () {
       this.setSliderWidth(true)
       this.slide.refresh()
+    },
+    handleImgLoad () {
+      console.log('图片加载成功咯……')
+      if (!this.isFirstImgLoaded) {
+        this.isFirstImgLoaded = true
+      }
     }
   },
   computed: {
@@ -200,7 +231,7 @@ export default {
       })
     }
   },
-  destoryed () {
+  beforeDestory () {
     this.slide && this.slide.destory()
   },
   components: {
@@ -213,9 +244,22 @@ export default {
   height: 100%;
   overflow: hidden;
 }
+.slide-wrapper {
+  width: 100%;
+  position: relative;
+  padding-top: (139 / 375) * 100%;
+  background: transparent;
+  .carousel-wrap {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    overflow: hidden;
+    
+  }
+}
 .carousel-wrap {
   width: 100%;
-  min-height: 60px;
   position: relative;
   overflow: hidden;
 }
