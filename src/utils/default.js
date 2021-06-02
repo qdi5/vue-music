@@ -1,5 +1,5 @@
 export default {
   backend: {
-    baseUrl: process.env.NODE_ENV === 'development' ? '/api' : 'http://163.wuzhe.online'
+    baseUrl: process.env.NODE_ENV === 'production' ? '/api' :'http://localhost:3000'
   }
 }

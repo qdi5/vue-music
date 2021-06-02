@@ -46,9 +46,10 @@
             </li>
           </template>
         </ul>
+        <loading v-if="isShowLoading"></loading>
+        <no-result v-if="isShowNoResult"></no-result>
       </div>
-      <loading v-if="isShowLoading"></loading>
-      <no-result v-if="isShowNoResult"></no-result>
+     
     </div>
     <transition enter-active-class="animated fadeInRight faster" leave-active-class="animated fadeOutRight faster">
       <router-view :key="key"></router-view>
@@ -139,10 +140,7 @@ export default {
               }
             }
           }
-          this.$nextTick(() => {
-            /* eslint-disable no-new */
-            this.searchScroll = new BScroll(this.$refs['searchResultWrapper'], {click: true, stopPropagation: true})
-          })
+          
         })).catch(error => {
           this.isShowLoading = false
           throw error
@@ -212,8 +210,17 @@ export default {
       if (this.isShowNoResult) {
         this.isShowNoResult = false
       }
+      this.$nextTick(() => {
+        /* eslint-disable no-new */
+        if (this.searchScroll) {
+          console.log('刷新scroll 嘿嘿')
+          this.searchScroll.refresh()
+        } else {
+          this.searchScroll = new BScroll(this.$refs['searchResultWrapper'], {click: true, stopPropagation: true})
+        }
+      })
     },
-    calcBottom: function (newValue) {
+    calcBottom: function () {
       this.$nextTick(() => {
         console.log('搜索页面刷新better-scroll')
         this.BScroll && this.BScroll.refresh()
@@ -226,7 +233,7 @@ export default {
       }
     }
   },
-  destroyed () {
+  beforeDestroy () {
     this.shScroll && this.shScroll.destroy()
     this.searchScroll && this.searchScroll.destroy()
   },

@@ -12,7 +12,7 @@ module.exports = {
     proxy: {
       '/api': {
         // 接口跨域，需要配置这个参数
-        target: 'http://163.wuzhe.online',
+        target: 'http://localhost:8008',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''

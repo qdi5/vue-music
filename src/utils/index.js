@@ -46,7 +46,6 @@ function calcMs (time) {
  2、根据key顺序排序
 */
 export function parseLyric (lyric) {
-  debugger
   // 以换行符分割
   let lyricAry = lyric.split(/\n/)
   // 删除最后一句空白歌词
