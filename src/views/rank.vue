@@ -30,7 +30,9 @@
         <loading v-if="!recommendToplist.length" text="加载推荐榜…"></loading>
       </div>
     </div>
-    <router-view :key="key"></router-view>
+    <transition name="slide">
+      <router-view :key="key"></router-view>
+    </transition>
   </div>
 </template>
 <script>

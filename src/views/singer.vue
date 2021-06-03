@@ -25,7 +25,9 @@
       </div>
     </div>
     <loading v-if="!hotSingers.length"></loading>
-    <router-view :key="key"></router-view>
+    <transition name="slide">
+      <router-view :key="key"></router-view>
+    </transition>
   </div>
 </template>
 <script>
